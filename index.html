@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Team Attendance Check-In</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; margin-top: 80px; }
+    input, button { padding: 10px; margin: 10px; }
+  </style>
+</head>
+<body>
+  <h1>Site Attendance Check-In</h1>
+  <p>Enter your name to check in:</p>
+
+  <input type="text" id="name" placeholder="Your name" />
+  <button onclick="checkIn()">Check In</button>
+
+  <p id="status"></p>
+
+  <script>
+    const scriptURL = "https://script.google.com/macros/s/AKfycbw87JmYKcIbHsJZbXFAZVFHxK0fcMdgyz1Q2YEv1e6s8cLU5Gzluhz_Et_Oj48DGiU9vQ/exec"; // replace this
+
+    async function checkIn() {
+      const name = document.getElementById("name").value.trim();
+      if (!name) return alert("Please enter your name.");
+
+      document.getElementById("status").textContent = "Checking in...";
+
+      try {
+        const response = await fetch(scriptURL, {
+          method: "POST",
+          body: JSON.stringify({ name }),
+          headers: { "Content-Type": "application/json" },
+        });
+        const result = await response.text();
+        document.getElementById("status").textContent = result || "Checked in successfully!";
+      } catch (e) {
+        document.getElementById("status").textContent = "Error: " + e.message;
+      }
+    }
+  </script>
+</body>
+</html>
